@@ -33,7 +33,7 @@ public class Game {
 				strList.add(String.valueOf(opp));
 			}
 
-
+			outerloop:
 			while (true) {
 				// 2. 사용자로부터 입력받기
 				System.out.print("숫자를 입력해주세요 : ");
@@ -57,7 +57,7 @@ public class Game {
 							continue;
 						if (strInputArr[i].equals(strInputArr[j])) {
 							System.out.println("*** 같은 숫자는 입력할 수 없습니다 ***");
-							break;
+							break outerloop;
 						}
 					}
 				}
