@@ -13,6 +13,30 @@ public class Game {
 		}
 		return false;
 	}
+	
+	private static boolean isValid(String strInput, String[] strInputArr) {
+		// 3. 입력값 유효성 검사
+		if (Arrays.asList(strInputArr).indexOf("0") != -1) {
+			System.out.println("*** 0은 입력할 수 없습니다 ***");
+			return false;
+		}
+		if (strInput.length() != 3) {
+			System.out.println("*** 세자리 숫자만 입력할 수 있습니다 ***");
+			return false;
+		}
+		for (int i = 0; i < strInputArr.length; i++) {
+			for (int j = 0; j < strInputArr.length; j++) {
+				if (i == j)
+					continue;
+				if (strInputArr[i].equals(strInputArr[j])) {
+					System.out.println("*** 같은 숫자는 입력할 수 없습니다 ***");
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -33,7 +57,6 @@ public class Game {
 				strList.add(String.valueOf(opp));
 			}
 
-			outerloop:
 			while (true) {
 				// 2. 사용자로부터 입력받기
 				System.out.print("숫자를 입력해주세요 : ");
@@ -42,25 +65,9 @@ public class Game {
 				String strInput = String.valueOf(input);
 				String[] strInputArr = strInput.split("");
 
-				// 3. 입력값 유효성 검사
-				if (Arrays.asList(strInputArr).indexOf("0") != -1) {
-					System.out.println("*** 0은 입력할 수 없습니다 ***");
+				boolean isValid = isValid(strInput, strInputArr);
+				if(isValid == false)
 					break;
-				}
-				if (strInput.length() != 3) {
-					System.out.println("*** 세자리 숫자만 입력할 수 있습니다 ***");
-					break;
-				}
-				for (int i = 0; i < strInputArr.length; i++) {
-					for (int j = 0; j < strInputArr.length; j++) {
-						if (i == j)
-							continue;
-						if (strInputArr[i].equals(strInputArr[j])) {
-							System.out.println("*** 같은 숫자는 입력할 수 없습니다 ***");
-							break outerloop;
-						}
-					}
-				}
 
 				// 4. 맞춰보기
 				int strike = 0;
