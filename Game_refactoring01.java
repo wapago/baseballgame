@@ -9,38 +9,42 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Game_refactoring01 {
-	private static Scanner scanner = new Scanner(System.in);
-	private static final int LENGTH_OF_NUMBER = 3;
+	// 메소드를 여러개 만들어서 하긴 했는데 static을 너무 많이 쓴건 아닌지 껄적지근함. static써보는거 처음.
+	public static Scanner scanner = new Scanner(System.in);
 	
-	private static Integer[] randomNumberArr = new Integer[LENGTH_OF_NUMBER];
-	private static int[] playNumIntArr = new int[LENGTH_OF_NUMBER];
-	private static String playNumStr;
-	private static String[] playNumStrArr;
+	public static final int LENGTH_OF_NUMBER = 3;
+	public static final int MIN_NUMBER_RANGE = 1;
+	public static final int MAX_NUMBER_RANGE = 9;
+	
+	public static Integer[] randomNumberArr = new Integer[LENGTH_OF_NUMBER];
+	public static String playNumStr;
+	public static String[] playNumStrArr;
+	public static int[] playNumIntArr = new int[LENGTH_OF_NUMBER];
+	
+	public static int strike = 0;
+	public static int ball = 0;
 	
 	public static void main(String[] args) {
 		start();
 	}
 	
 	public static void start() {
-		randomNumberArr = createRndNumber();
+		createRndNumber();
 		play();
 	}
 	
-	public static Integer[] createRndNumber() {
+	public static void createRndNumber() {
 		List<Integer> oneToNine = new ArrayList<>();
-		Integer[] rndNumberArr = new Integer[LENGTH_OF_NUMBER];
 		
-		for(int i=1; i<=9; i++) {
+		for(int i=MIN_NUMBER_RANGE; i<=MAX_NUMBER_RANGE; i++) {
 			oneToNine.add(i);
 		}
 		
 		Collections.shuffle(oneToNine);
 		
 		for(int i=0; i<LENGTH_OF_NUMBER; i++) {
-			rndNumberArr[i] = oneToNine.get(i);
+			randomNumberArr[i] = oneToNine.get(i);
 		}
-		
-		return rndNumberArr;
 	}
 	
 	public static void play() {
@@ -50,6 +54,8 @@ public class Game_refactoring01 {
 		
 		isValidInput(playNumber);
 		matchWithRndNumber();
+		printResult();
+		isRestart();
 	}
 	
 	public static void isValidInput(int playNumber) {
@@ -73,8 +79,8 @@ public class Game_refactoring01 {
 	}
 	
 	public static void matchWithRndNumber() {
-		int strike = 0;
-		int ball = 0;
+		strike = 0;
+		ball = 0;
 		
 		List<Integer> randomNumberList = Arrays.asList(randomNumberArr);
 		
@@ -91,34 +97,36 @@ public class Game_refactoring01 {
 				ball++;
 			}
 		}
-		
-		printResult(strike, ball);
 	}
 	
-	public static void printResult(int strike, int ball) {
+	public static void printResult() {
 		if(strike == 0 && ball == 0) {
 			System.out.println("낫싱");
 			play();
 		}
 		
-		if(strike == 3) {
-			System.out.println("3개의 숫자를 모두 맞히셨습니다!!");
-			isRestart();
+		if(strike != 3 && (strike != 0 || ball != 0)) {
+			System.out.println(strike + "스트라이크, " + ball + "볼");
+			play();
 		}
 		
-		System.out.println(strike + "스트라이크, " + ball + "볼");
-		play();
+		if(strike == 3) {
+			System.out.println("3개의 숫자를 모두 맞히셨습니다!!");
+		}
 	}
 	
 	public static void isRestart() {
 		System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+		
 		int restart = scanner.nextInt();
 		
-		if(restart == 1)
+		if(restart == 1) {
 			start();
+		}
 		
-		if(restart == 2) 
+		if(restart == 2) {
 			System.exit(0);
+		}
 		
 		throw new IllegalArgumentException("1 또는 2를 입력해주세요");
 	}
